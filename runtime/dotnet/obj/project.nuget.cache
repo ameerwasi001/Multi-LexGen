@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "+StrBAXiu8ac5Fg3ou+aDS36dZslIrcq5SHinXCUSCSYJiXf79Updl0L/lEnVVGMm6VCDS84xuzzUTvuIb+Xng==",
+  "success": true,
+  "projectFilePath": "E:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Ameer\\.nuget\\packages\\fsharp.core\\4.7.2\\fsharp.core.4.7.2.nupkg.sha512"
+  ],
+  "logs": []
+}
