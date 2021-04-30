@@ -83,7 +83,7 @@ will output
 ```
 The functions such as contains come from a specified helper module from the language being used, the command line tool takes commands with the following syntax, there exists a helper module containing few functions for every language runtime
 ```
-[tool-name] [source-file] [output-file-path] [helper-module]
+[tool-name] [output-language] [source-file] [output-file-path] [helper-module]
 ```
 functions in these modules should take a token followed by whatever arguments it deems nessacary and always returns a boolean so that a decision on whether it's matched or not can be made. More information is available about integration in the integration section.
 # Integration
