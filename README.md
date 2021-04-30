@@ -70,6 +70,7 @@ WHITESPACE ?= _
 NUM ?= contains '.' 1 ? FLOAT
 NUM ?= contains '.' 3 ? IPV4
 NUM ?= contains '.' 0 ? INT
+NUM ?= !'Unsupported number of periods found'
 ```
 These conditions applied in the given order for a specific token but no order is guranteed for different input tokens. The above, given this input
 ```
@@ -80,6 +81,14 @@ will output
 [INT:1]
 [IPV4:1.1.1.1]
 [FLOAT:1.1]
+```
+but if the given output is 
+```
+1.1.1
+```
+then it would raise an error*(Error is very much language dependent, in Fsharp or Rust for example it would return an error while an exception would be raised when using Python) because of the last modification like such
+```
+Unsupported number of periods found
 ```
 The functions such as contains come from a specified helper module from the language being used, the command line tool takes commands with the following syntax, there exists a helper module containing few functions for every language runtime
 ```
