@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj": {}
+    "e:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj": {}
   },
   "projects": {
-    "E:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj": {
+    "e:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj",
+        "projectUniqueName": "e:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj",
         "projectName": "dotnet",
-        "projectPath": "E:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj",
+        "projectPath": "e:\\lexerGenerator\\runtime\\dotnet\\dotnet.fsproj",
         "packagesPath": "C:\\Users\\Ameer\\.nuget\\packages\\",
-        "outputPath": "E:\\lexerGenerator\\runtime\\dotnet\\obj\\",
+        "outputPath": "e:\\lexerGenerator\\runtime\\dotnet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Ameer\\AppData\\Roaming\\NuGet\\NuGet.Config"

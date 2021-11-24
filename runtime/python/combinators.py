@@ -22,9 +22,7 @@ def literal_parse(expected, inp):
             second = second[1:]
             match_str = "{}{}".format(match_str, character)
             i+=1
-    if expected == None and second == "":
-        return (first + [match_str], second)
-    elif match_str == expected:
+    if match_str == expected:
         return (first + [match_str], second)
     else:
         raise InputError("expected {}, found {}".format(expected, match_str))
@@ -69,6 +67,7 @@ def tokensFromRules(tok_class, ruleset, inp):
             
             try:
                 next_inp = rule(([], snd(next_inp)))
+                print(next_inp)
                 matched = True
             except InputError:
                 i+=1
