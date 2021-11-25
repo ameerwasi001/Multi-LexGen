@@ -8,6 +8,7 @@ import Parser
 import RustGen
 import PythonGen
 import FSharpGen
+import JSGen
 import CodeGen
 import Text.Megaparsec as P
 
@@ -20,3 +21,4 @@ main = do
         dispatch "python" = compile Python
         dispatch "rust" = compile Rust
         dispatch "fs" = compile FSharp
+        dispatch "js" = compile JS

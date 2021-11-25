@@ -120,21 +120,23 @@ function digit(a: [string[], string]) {
 }
 
 
-function num(a: [string[], string]) { return unaryOp("+", a => digit(a), a) }
-function decimal(_x: [string[], string]) { return binOp(_x => num(_x), ">", _x => unaryOp("?", _x => binOp(_x => literalParse(".", _x), ">", _x => num(_x), _x), _x), _x) }
-function plus(_x: [string[], string]) { return literalParse("+", _x) }
-function minus(_x: [string[], string]) { return literalParse("-", _x) }
-function div(_x: [string[], string]) { return literalParse("/", _x) }
-function mul(_x: [string[], string]) { return literalParse("*", _x) }
+// function num(a: [string[], string]) { return unaryOp("+", a => digit(a), a) }
+// function decimal(_x: [string[], string]) { return binOp(_x => num(_x), ">", _x => unaryOp("?", _x => binOp(_x => literalParse(".", _x), ">", _x => num(_x), _x), _x), _x) }
+// function plus(_x: [string[], string]) { return literalParse("+", _x) }
+// function minus(_x: [string[], string]) { return literalParse("-", _x) }
+// function div(_x: [string[], string]) { return literalParse("/", _x) }
+// function mul(_x: [string[], string]) { return literalParse("*", _x) }
 
-const out = (_x: [string[], string]) => tokensFromRules([["num", decimal], ["plus", plus], ["minus", minus], ["div", div], ["mul", mul]], _x)
-const moded = (_x: [string[], string]) => {
-    const res = out(_x)
-    const modifiers: Record<string, ((tok: Token) => string | null)[]> = {
-        "num": [(tok: Token) => tok.val.includes(".") ? "decimal" : null]
-    }
-    return modifyTokenByCondition(res, modifiers)
-}
+// const out = (_x: [string[], string]) => tokensFromRules([["num", decimal], ["plus", plus], ["minus", minus], ["div", div], ["mul", mul]], _x)
+// const moded = (_x: [string[], string]) => {
+//     const res = out(_x)
+//     const modifiers: Record<string, ((tok: Token) => string | null)[]> = {
+//         "num": [(tok: Token) => tok.val.includes(".") ? "decimal" : null]
+//     }
+//     return modifyTokenByCondition(res, modifiers)
+// }
 
-const inp: [string[], string] = [[], "1291.31+11*2.3"]
-for (const tok of moded(inp)) console.log(tok.toString())
+// const inp: [string[], string] = [[], "1291.31+11*2.3"]
+// for (const tok of moded(inp)) console.log(tok.toString())
+
+export {binOp, unaryOp, literalParse, tokensFromRules, modifyTokenByCondition}
