@@ -1,5 +1,5 @@
 import {Token} from "./token.js"
-import {binOp, unaryOp, literalParse, tokensFromRules, modifyTokenByCondition} from "./combinators.ts"
+import {binOp, unaryOp, literalParse, raiseError, tokensFromRules, modifyTokenByCondition} from "./combinators.ts"
 import * as lexerHelper from "./lexerHelpers.ts";
 
 function digit(_x) { return binOp(_x=>binOp(_x=>binOp(_x=>binOp(_x=>binOp(_x=>binOp(_x=>binOp(_x=>binOp(_x=>binOp(_x=>literalParse("1", _x), "|", _x=>literalParse("2", _x), _x), "|", _x=>literalParse("3", _x), _x), "|", _x=>literalParse("4", _x), _x), "|", _x=>literalParse("5", _x), _x), "|", _x=>literalParse("6", _x), _x), "|", _x=>literalParse("7", _x), _x), "|", _x=>literalParse("8", _x), _x), "|", _x=>literalParse("9", _x), _x), "|", _x=>literalParse("0", _x), _x) }

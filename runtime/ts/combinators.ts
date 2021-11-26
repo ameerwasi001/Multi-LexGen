@@ -54,6 +54,8 @@ const unaryOp = (op: "*" | "+" | "?", operand: (a: [string[], string]) => [strin
     } else throw `This should not have happend, I expected ?, *, +, but got ${op}`
 }
 
+const raiseError = (err: string) => { throw err }
+
 function tokensFromRules(ruleset: [string, (_: [string[], string]) => [string[], string]][], inp: [string[], string]): Token[] {
     const generated_toks: Token[] = []
     let next_inp = inp
@@ -139,4 +141,4 @@ function digit(a: [string[], string]) {
 // const inp: [string[], string] = [[], "1291.31+11*2.3"]
 // for (const tok of moded(inp)) console.log(tok.toString())
 
-export {binOp, unaryOp, literalParse, tokensFromRules, modifyTokenByCondition}
+export {binOp, unaryOp, literalParse, raiseError, tokensFromRules, modifyTokenByCondition}

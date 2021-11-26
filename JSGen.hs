@@ -17,7 +17,7 @@ splitStr sub str = split' sub str [] []
         | otherwise            = split' sub (tail str) (head str:subacc) acc
 
 importRuntime :: String
-importRuntime = "import {Token} from \"./token.js\"\nimport {binOp, unaryOp, literalParse, tokensFromRules, modifyTokenByCondition} from \"./combinators.ts\""
+importRuntime = "import {Token} from \"./token.js\"\nimport {binOp, unaryOp, literalParse, raiseError, tokensFromRules, modifyTokenByCondition} from \"./combinators.ts\""
 
 compileExpr :: Expr -> String 
 compileExpr (ParseStringNode str _) = "_x=>literalParse(" ++ show str ++ ", _x)"
