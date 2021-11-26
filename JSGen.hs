@@ -17,7 +17,7 @@ splitStr sub str = split' sub str [] []
         | otherwise            = split' sub (tail str) (head str:subacc) acc
 
 importRuntime :: String
-importRuntime = "import {Token} from \"./token.js\"\nimport {binOp, unaryOp, literalParse, tokensFromRules} from \"./combinators.ts\""
+importRuntime = "import {Token} from \"./token.js\"\nimport {binOp, unaryOp, literalParse, tokensFromRules, modifyTokenByCondition} from \"./combinators.ts\""
 
 compileExpr :: Expr -> String 
 compileExpr (ParseStringNode str _) = "_x=>literalParse(" ++ show str ++ ", _x)"
@@ -49,17 +49,11 @@ removeFirst4 = tail. tail . tail . tail
 compileExtractors :: [DataExtractor] -> String
 compileExtractors ds = "const getUnmodifiedToks = (_x) => { return tokensFromRules([" ++ intercalate ", " (map (\(DataExtractor id exp _) -> "[" ++ show id ++ ", " ++ compileExpr exp ++ "]") ds) ++ "], _x) }"
 
--- compileModifiers :: String -> [DataModifier] -> String
--- compileModifiers supportCode mods = 
---     "const getToks = (_x) => { \n\t" ++
---         "match get_unmodified_toks((vec![], _x)) { \n\t\t" ++
---             "Ok(a) => modify_token_by_condition(a, make_map(vec![" ++ intercalate ", " (Map.foldrWithKey (\k v ks -> ("(" ++ show k ++ ", " ++ v ++ ")"):ks) [] $ Map.map (\xs -> "vec![" ++ intercalate ", " (map (\x -> "inline_fun!(_t: Token => ModifierRes := " ++ compileProgramExpr supportCode x ++ ") as ModifierType") xs) ++ "]") (buildMap Map.empty mods)) ++ "])),\n\t\t" ++
---             "Err(err) => return Err(err)\n\t" ++
---         "}\n" ++ 
---     "}"
+compileModifiers :: String -> [DataModifier] -> String
+compileModifiers supportCode mods = "const getToks = (_x) => modifyTokenByCondition(getUnmodifiedToks([[], _x]), {" ++ intercalate ", " (Map.foldrWithKey (\k v ks -> (show k ++ ": " ++ v):ks) [] $ Map.map (\xs -> "[" ++ intercalate ", " (map (\ x -> "(_t) => " ++ compileProgramExpr supportCode x) xs) ++ "]") (buildMap Map.empty mods)) ++ "})"
 
 compileLexeme :: String -> Lexeme -> String
-compileLexeme supportCode (Lexeme rds exts mods)  = importRuntime ++ "\nimport * as lexerHelper from " ++ show supportCode ++ ";\n\n" ++ intercalate "\n" (map compileRule rds) ++ "\n\n" ++ compileExtractors exts
+compileLexeme supportCode (Lexeme rds exts mods)  = importRuntime ++ "\nimport * as lexerHelper from " ++ show supportCode ++ ";\n\n" ++ intercalate "\n" (map compileRule rds) ++ "\n\n" ++ compileExtractors exts ++ "\n" ++ compileModifiers "lexerHelper" mods ++ "\n\nexport {getToks, getUnmodifiedToks}"
 
 instance CodeGenerator JS where
     generate _ = compileLexeme

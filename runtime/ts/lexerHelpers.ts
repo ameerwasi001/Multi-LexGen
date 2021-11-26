@@ -20,7 +20,7 @@ const occurrences = (string: string, subString: string, allowOverlapping=false) 
 }
 
 const contains = (t: Token, str: string, times: number) => occurrences(t.val, str) === times
-const isUpper = (t: Token, i: number) => t.val[i].isupper()
+const isUpper = (t: Token, i: number) => t.val[i] === t.val[i].toUpperCase()
 const fullyApplies = (t: Token, r: (_: [string[], string]) => [string[], string]) => {
     try {
         const [_, rest] = r([[], t.val])
