@@ -22,3 +22,4 @@ main = do
         dispatch "rust" = compile Rust
         dispatch "fs" = compile FSharp
         dispatch "js" = compile JS
+        dispatch lang = error $ lang ++ " is not support for now"

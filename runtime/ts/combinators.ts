@@ -1,7 +1,12 @@
 import {Token} from "./token.js"
+import {InputError, InternalError} from "./errors.js"
 
 function fst<A, B>([a, _]: [A, B]){ return a }
 function snd<A, B>([_, b]: [A, B]){ return b }
+
+const validateError = (err: Error) => {
+    if (!(err instanceof InputError)) throw err
+}
 
 const literalParse = (expected: string | null, inp: [string[], string]): [string[], string] => {
     let matchStr = ""
@@ -9,7 +14,7 @@ const literalParse = (expected: string | null, inp: [string[], string]): [string
     let [first, second] = inp
 
     if (expected != null){
-        if (expected.length > second.length) throw `cannot match ${second} with ${expected}`
+        if (expected.length > second.length) throw new InputError(`cannot match ${second} with ${expected}`)
         while (i < expected.length){
             const character = second[0]
             second = second.substring(1)
@@ -18,15 +23,18 @@ const literalParse = (expected: string | null, inp: [string[], string]): [string
         }
     }
     if (matchStr == expected) return [first.concat([matchStr]), second]
-    else throw `expected ${expected}, found ${matchStr}`
+    else throw new InputError(`expected ${expected}, found ${matchStr}`)
 }
 
 const binOp = (left: (a: [string[], string]) => [string[], string], op: "|" | ">", right: (a: [string[], string]) => [string[], string], inp: [string[], string]): [string[], string] => {
     if (op === "|"){
         try {return left(inp)}
-        catch {return right(inp)}
+        catch(err) {
+            validateError(err)
+            return right(inp)
+        }
     } else if (op === ">") return right(left(inp))
-    else throw `This should not have happend, I expected | or > but got ${op}`
+    else throw new InternalError(`This should not have happend, I expected | or > but got ${op}`)
 }
 
 const unaryOp = (op: "*" | "+" | "?", operand: (a: [string[], string]) => [string[], string], inp: [string[], string]): [string[], string] => {
@@ -35,26 +43,29 @@ const unaryOp = (op: "*" | "+" | "?", operand: (a: [string[], string]) => [strin
         try {
             output = operand(inp)
         } catch(err) {
+            validateError(err)
             if (op === "+") throw err
             return inp
         }
         while (true){
             try {
                 output = operand(output)
-            } catch {
+            } catch(err) {
+                validateError(err)
                 return output
             }
         }
     } else if (op === "?"){
         try {
             return operand(inp)
-        } catch {
+        } catch(err) {
+            validateError(err)
             return inp
         }
-    } else throw `This should not have happend, I expected ?, *, +, but got ${op}`
+    } else throw new InternalError(`This should not have happend, I expected ?, *, +, but got ${op}`)
 }
 
-const raiseError = (err: string) => { throw err }
+const raiseError = (err: string) => { throw new InputError(err) }
 
 function tokensFromRules(ruleset: [string, (_: [string[], string]) => [string[], string]][], inp: [string[], string]): Token[] {
     const generated_toks: Token[] = []
@@ -68,7 +79,8 @@ function tokensFromRules(ruleset: [string, (_: [string[], string]) => [string[],
             try{
                 next_inp = rule([[], snd(next_inp)])
                 matched = true
-            } catch {
+            } catch(err) {
+                validateError(err)
                 i+=1
                 continue
             }
@@ -76,7 +88,7 @@ function tokensFromRules(ruleset: [string, (_: [string[], string]) => [string[],
             generated_toks.push(x)
             i += 1
         }
-        if (!matched) throw `Unmatched text \"${snd(next_inp)[0] === "\n" ? snd(next_inp).split("\n")[1] : snd(next_inp).split("\n")[0]}\"`
+        if (!matched) throw new InputError(`Unmatched text \"${snd(next_inp)[0] === "\n" ? snd(next_inp).split("\n")[1] : snd(next_inp).split("\n")[0]}\"`)
     }
     return generated_toks
 }
